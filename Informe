@@ -1,0 +1,98 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+
+\title{Informe: Análisis y Modelado de Calidad del Aire}
+\author{Tu Nombre}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+Este informe describe el flujo de análisis, limpieza, visualización y modelado de datos de calidad del aire obtenidos de la base de datos \texttt{AirQualityUCI.csv}. Se explica cómo se procesaron los datos, qué análisis se realizaron, y cómo se construyó un modelo de regresión lineal para predecir CO a partir de NO2.
+
+\section{Descripción de los Datasets}
+
+\subsection{AirQualityUCI.csv}
+\begin{itemize}
+    \item Contiene mediciones horarias de contaminantes como CO, NO2, NOx, temperatura, humedad, entre otros.
+    \item Es un dataset crudo que requiere limpieza, conversión de formatos y tratamiento de valores faltantes o erróneos.
+\end{itemize}
+
+\subsection{AirQuality\_Clean\_Normalized.csv}
+\begin{itemize}
+    \item Versión limpia y normalizada de \texttt{AirQualityUCI.csv}.
+    \item Incluye únicamente las columnas de interés (CO y NO2) normalizadas entre 0 y 1.
+    \item Lista para análisis estadístico, visualizaciones y modelado.
+\end{itemize}
+
+\section{Analisis.py: Limpieza y Preprocesamiento de Datos}
+\begin{itemize}
+    \item \textbf{Propósito:} Preparar los datos crudos para análisis y modelado.
+    \item \textbf{Operaciones principales:}
+    \begin{enumerate}
+        \item Limpieza de nombres de columnas y eliminación de columnas irrelevantes.
+        \item Conversión de las columnas \texttt{Date} y \texttt{Time} a un índice datetime.
+        \item Eliminación de filas con fechas inválidas.
+        \item Reemplazo de valores de sensor incorrectos (-200) por \texttt{NaN}.
+        \item Selección de las columnas \texttt{CO(GT)} y \texttt{NO2(GT)}.
+        \item Interpolación de valores faltantes basada en tiempo.
+        \item Normalización de los valores entre 0 y 1 usando MinMaxScaler.
+    \end{enumerate}
+    \item \textbf{Salida:} DataFrame limpio y normalizado, listo para análisis y visualización.
+\end{itemize}
+
+\section{Datos.py: Análisis Exploratorio y Visualización}
+\begin{itemize}
+    \item \textbf{Propósito:} Analizar y visualizar patrones en los datos normalizados.
+    \item \textbf{Operaciones principales:}
+    \begin{enumerate}
+        \item Cálculo de estadísticas descriptivas (media, desviación estándar, percentiles).
+        \item Histogramas de CO y NO2 con densidad de probabilidad.
+        \item Gráficas de tendencias temporales para observar patrones diarios y estacionales.
+        \item Cálculo y visualización de la correlación entre CO y NO2.
+        \item Cálculo de promedios diarios y por hora, incluyendo visualizaciones interactivas con Plotly.
+    \end{enumerate}
+    \item \textbf{Salida:} Visualizaciones y métricas descriptivas que permiten comprender la distribución y relación de los contaminantes.
+\end{itemize}
+
+\section{Regresion.py: Modelado de Regresión Lineal}
+\begin{itemize}
+    \item \textbf{Propósito:} Predecir los valores de CO a partir de NO2 mediante un modelo de regresión lineal.
+    \item \textbf{Operaciones principales:}
+    \begin{enumerate}
+        \item Selección de variables independientes (\texttt{NO2(GT)}) y dependientes (\texttt{CO(GT)}).
+        \item División de los datos en conjuntos de entrenamiento (80\%) y validación (20\%).
+        \item Entrenamiento del modelo de regresión lineal.
+        \item Predicción de CO para los conjuntos de entrenamiento y validación.
+        \item Evaluación del modelo usando R² y RMSE.
+        \item Visualización de los resultados con gráficas de dispersión y línea de predicción.
+    \end{enumerate}
+    \item \textbf{Salida:} Modelo entrenado de regresión lineal, métricas de evaluación y gráficas de ajuste.
+\end{itemize}
+
+\section{Conclusiones}
+\begin{itemize}
+    \item La limpieza y normalización de los datos permite trabajar con información consistente y confiable.
+    \item El análisis exploratorio revela patrones diarios y horarios en la contaminación por CO y NO2.
+    \item Existe correlación entre CO y NO2, que se puede explotar para modelado predictivo.
+    \item La regresión lineal proporciona una estimación razonable de CO a partir de NO2, útil para análisis preliminares y estudios de control de calidad del aire.
+\end{itemize}
+
+\section{Referencias}
+\begin{itemize}
+    \item \href{https://archive.ics.uci.edu/ml/datasets/Air+Quality}{UCI Air Quality Dataset}
+    \item \href{https://pandas.pydata.org/}{Pandas Documentation}
+    \item \href{https://scikit-learn.org/stable/}{Scikit-learn Documentation}
+    \item \href{https://seaborn.pydata.org/}{Seaborn Documentation}
+    \item \href{https://plotly.com/python/}{Plotly Documentation}
+\end{itemize}
+
+\end{document}
